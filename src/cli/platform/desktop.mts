@@ -44,7 +44,7 @@ export class DesktopPlatform implements IPlatform {
     );
 
     const testEnvOptions = JSON.stringify({
-      nodeTestOpts: { ...args, ...test.nodeTest },
+      nodeTestOpts: { ...args },
       colorDefault: supportsColor.stdout || process.env.NODE_TEST_COLORS !== undefined,
       preload,
       files: await gatherFiles(config.path, test),
