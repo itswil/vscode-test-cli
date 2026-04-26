@@ -4,9 +4,9 @@
 
 import { Transform } from 'node:stream';
 import { inspect } from 'node:util';
-import { TestEvent, TestEventTuple } from './fullJsonStreamReporterTypes.cjs';
+import { TestEvent, TestEventTuple } from './fullJsonStreamReporterTypes.js';
 
-export * from './fullJsonStreamReporterTypes.cjs';
+export * from './fullJsonStreamReporterTypes.js';
 
 class FullJsonStreamReporter extends Transform {
   private slow = 75;
@@ -115,4 +115,4 @@ class FullJsonStreamReporter extends Transform {
   }
 }
 
-module.exports = FullJsonStreamReporter;
+export default FullJsonStreamReporter;

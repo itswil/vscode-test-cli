@@ -1,11 +1,38 @@
 # ⚠️ Fork: Using node:test instead of mocha
 
-This fork replaces mocha with Node.js's built-in `node:test` runner.
+## In this fork
 
-## Breaking Changes
+Replaces mocha with Node.js's built-in `node:test` runner.
+- No longer uses `.cts` files - all source is now `.ts`
+
+## In your VSCode Extension
+
+### Breaking Changes
 
 - Test files should import `describe`, `it`, `test`, `beforeEach`, etc. from `node:test`
 - Use `beforeEach`/`afterEach` instead of `setup`/`teardown`
+
+### Test File Syntax
+
+```typescript
+// out/test/myTest.test.ts
+import { describe, test, beforeEach } from 'node:test';
+
+describe('my extension', () => {
+  beforeEach(() => {
+    // setup code
+  });
+
+  test('does something', () => {
+    // test code
+  });
+});
+```
+
+## Dependencies
+
+- `@types/node` (required for TypeScript)
+- Add `"types": ["node"]` to your `tsconfig.json` compilerOptions
 
 
 ---

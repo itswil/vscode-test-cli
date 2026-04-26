@@ -14,7 +14,7 @@ import {
 } from './cli/config.mjs';
 import { Coverage } from './cli/coverage.mjs';
 import { IPreparedRun, IRunContext, platforms } from './cli/platform/index.mjs';
-import { TestConfiguration } from './config.cjs';
+import { TestConfiguration } from './config.js';
 
 export const args = cliArgs.parseSync();
 

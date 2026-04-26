@@ -2,6 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
+import type { TestsStream } from 'node:test';
 import test from 'node:test';
 
 export async function run() {
@@ -23,16 +24,16 @@ export async function run() {
   const requirePaths = [...preload, ...ensureArray(nodeTestOpts.require)];
 
   for (const f of requirePaths) {
-    require(normalizeCasing(f));
+    await import(normalizeCasing(f));
   }
 
   const normalizedFiles = files.map(normalizeCasing);
 
   for (const file of normalizedFiles) {
-    require(file);
+    await import(file);
   }
 
-  const stream = test.run({
+  const stream: TestsStream = test.run({
     ...nodeTestOpts,
   } as Parameters<typeof test.run>[0]);
 
@@ -44,9 +45,15 @@ export async function run() {
 
   await new Promise<void>((resolve) => {
     stream.on('test:summary', (data) => {
-      if (data && typeof data === 'object' && 'counts' in data) {
-        const summaryData = data as { counts: { failed: number } };
-        totalFailed = summaryData.counts.failed;
+      if (data) {
+        const summaryData = data as {
+          counts: { failed?: number; passed: number; skipped: number; tests: number };
+        };
+        totalFailed =
+          summaryData.counts.failed ??
+          summaryData.counts.tests -
+            summaryData.counts.passed -
+            summaryData.counts.skipped;
       }
       resolve();
     });

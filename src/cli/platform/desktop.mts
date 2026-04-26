@@ -7,7 +7,7 @@ import { spawn } from 'child_process';
 import { join, resolve as resolvePath } from 'path';
 import supportsColor from 'supports-color';
 import { fileURLToPath, pathToFileURL } from 'url';
-import { IDesktopTestConfiguration } from '../../config.cjs';
+import { IDesktopTestConfiguration } from '../../config.js';
 import { CliArgs } from '../args.mjs';
 import { ResolvedTestConfiguration } from '../config.mjs';
 import { CliExpectedError } from '../error.mjs';
@@ -59,7 +59,7 @@ class PreparedDesktopRun implements IPreparedRun {
     return this.config.extensionDevelopmentPath(this.test);
   }
   private get extensionTestsPath() {
-    return resolvePath(fileURLToPath(new URL('.', import.meta.url)), '../../runner.cjs');
+    return resolvePath(fileURLToPath(new URL('.', import.meta.url)), '../../runner.js');
   }
   private get env(): Record<string, string | undefined> {
     return {

@@ -2,7 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { TestConfiguration } from '../../config.cjs';
+import { TestConfiguration } from '../../config.js';
 import { CliArgs } from '../args.mjs';
 import { ResolvedTestConfiguration } from '../config.mjs';
 import { DesktopPlatform } from './desktop.mjs';

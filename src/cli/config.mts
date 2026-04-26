@@ -9,7 +9,7 @@ import {
   IConfigurationWithGlobalOptions,
   ICoverageConfiguration,
   TestConfiguration,
-} from '../config.cjs';
+} from '../config.js';
 import { CliExpectedError } from './error.mjs';
 import { mustResolve } from './resolver.mjs';
 import { ensureArray } from './util.mjs';

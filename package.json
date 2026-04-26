@@ -3,10 +3,10 @@
   "version": "0.0.13",
   "description": "Command-line runner for VS Code extension tests",
   "scripts": {
-    "prepack": "npm run build",
-    "build": "npm run clean && tsc",
+    "prepack": "pnpm run build",
+    "build": "pnpm run clean && tsc",
     "clean": "node -e \"fs.rmSync('out',{force:true,recursive:true})\"",
-    "test": "npm run clean && tsc --noEmit",
+    "test": "pnpm run clean && tsc --noEmit",
     "fmt": "prettier --write \"src/**/*.{mts,cts}\" \"*.md\"",
     "watch": "tsc --watch",
     "prettier": "prettier --write src"
@@ -28,40 +28,31 @@
       "require": "./out/fullJsonStreamReporter.cjs"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Microsoft/vscode-test-cli.git"
-  },
   "keywords": [
     "vscode",
     "test",
     "cli"
   ],
-  "author": "Connor Peet <connor@peet.io>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Microsoft/vscode-test-cli/issues"
-  },
-  "homepage": "https://github.com/Microsoft/vscode-test-cli#readme",
+  "author": "itswil",
   "devDependencies": {
-    "@types/node": "^20.19.39",
-    "@types/yargs": "^17.0.33",
+    "@types/node": "^25.6.0",
+    "@types/yargs": "^17.0.35",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/test-web": ">=0.0.74",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.3"
+    "@vscode/test-web": "^0.0.80",
+    "prettier": "^3.8.3",
+    "typescript": "^5.7.0"
   },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true
   },
 "dependencies": {
-    "c8": "^10.1.3",
-    "chokidar": "^3.6.0",
-    "enhanced-resolve": "^5.18.3",
-    "glob": "^11.1.0",
-    "minimatch": "^10.2.1",
+    "c8": "^11.0.0",
+    "chokidar": "^5.0.0",
+    "enhanced-resolve": "^5.21.0",
+    "glob": "^13.0.6",
+    "minimatch": "^10.2.5",
     "supports-color": "^10.2.2",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   }
 }
