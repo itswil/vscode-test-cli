@@ -1,3 +1,29 @@
+# ⚠️ Fork: Using node:test instead of mocha
+
+This fork replaces mocha with Node.js's built-in `node:test` runner.
+
+## Breaking Changes
+
+- Test files must use `describe`/`it` (BDD) instead of `suite`/`test` (TDD)
+- Use `beforeEach`/`afterEach` instead of `setup`/`teardown`
+- Config option renamed from `mocha:` to `nodeTest:`
+
+Example config:
+```js
+// .vscode-test.mjs
+import { defineConfig } from '@vscode/test-cli';
+
+export default defineConfig({
+  files: 'out/test/**/*.test.js',
+  nodeTest: {
+    require: `./out/test-utils.js`,
+    timeout: 20000,
+  },
+});
+```
+
+---
+
 ### @vscode/test-cli
 
 This is an configuration-driver command line runner for [VS Code extension tests](https://code.visualstudio.com/api/working-with-extensions/testing-extension). It provides a simple, configuration-driven interface for running tests, and has its own VS Code extension that allows running tests in the UI.
@@ -37,8 +63,8 @@ export default defineConfig([
     // Optional: install additional extensions to the installation prior to testing. By
     //default, any `extensionDependencies` from the package.json are automatically installed.
     installExtensions: ['ms-vscode.js-debug-nightly'],
-    // Optional: additional mocha options to use:
-    mocha: {
+    // Optional: additional node:test options to use:
+    nodeTest: {
       require: `./out/test-utils.js`,
       timeout: 20000,
     },
@@ -47,7 +73,7 @@ export default defineConfig([
 ]);
 ```
 
-Tests included with this command line are run in Mocha. You can run the tests simply by running `vscode-test` on the command line. You can view more options with `vscode-test --help`; this command line is very similar to Mocha. For example, to watch and run only tests named "addition", you can run:
+Tests included with this command line are run using Node.js's built-in `node:test` runner. You can run the tests simply by running `vscode-test` on the command line. You can view more options with `vscode-test --help`. For example, to watch and run only tests named "addition", you can run:
 
 ```sh
 vscode-test --watch 'out/**/*.js' --grep 'addition'
