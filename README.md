@@ -4,23 +4,9 @@ This fork replaces mocha with Node.js's built-in `node:test` runner.
 
 ## Breaking Changes
 
-- Test files must use `describe`/`it` (BDD) instead of `suite`/`test` (TDD)
+- Test files should import `describe`, `it`, `test`, `beforeEach`, etc. from `node:test`
 - Use `beforeEach`/`afterEach` instead of `setup`/`teardown`
-- Config option renamed from `mocha:` to `nodeTest:`
 
-Example config:
-```js
-// .vscode-test.mjs
-import { defineConfig } from '@vscode/test-cli';
-
-export default defineConfig({
-  files: 'out/test/**/*.test.js',
-  nodeTest: {
-    require: `./out/test-utils.js`,
-    timeout: 20000,
-  },
-});
-```
 
 ---
 
@@ -63,11 +49,6 @@ export default defineConfig([
     // Optional: install additional extensions to the installation prior to testing. By
     //default, any `extensionDependencies` from the package.json are automatically installed.
     installExtensions: ['ms-vscode.js-debug-nightly'],
-    // Optional: additional node:test options to use:
-    nodeTest: {
-      require: `./out/test-utils.js`,
-      timeout: 20000,
-    },
   },
   // you can specify additional test configurations if necessary
 ]);
