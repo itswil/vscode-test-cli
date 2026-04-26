@@ -2,12 +2,12 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { promises as fs } from 'fs';
+import { promises as fs } from "fs";
 
 export const ensureArray = <T,>(value: T | T[]): T[] => (Array.isArray(value) ? value : [value]);
 
 export const readJSON = async <T,>(path: string): Promise<T> =>
-  JSON.parse(await fs.readFile(path, 'utf8'));
+  JSON.parse(await fs.readFile(path, "utf8"));
 
 export const writeJSON = async (path: string, value: unknown) =>
   fs.writeFile(path, JSON.stringify(value));
@@ -23,7 +23,7 @@ export const mutateObjectPrimitives = (obj: any, replacer: (value: any) => any):
     }
     return obj;
   }
-  if (obj && typeof obj === 'object') {
+  if (obj && typeof obj === "object") {
     for (const [key, value] of Object.entries(obj)) {
       const newKey = replacer(key);
       if (newKey !== key) {

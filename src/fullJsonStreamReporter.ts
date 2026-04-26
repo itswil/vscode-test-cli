@@ -2,11 +2,11 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { Transform } from 'node:stream';
-import { inspect } from 'node:util';
-import { TestEvent, TestEventTuple } from './fullJsonStreamReporterTypes.js';
+import { Transform } from "node:stream";
+import { inspect } from "node:util";
+import { TestEvent, TestEventTuple } from "./fullJsonStreamReporterTypes.js";
 
-export * from './fullJsonStreamReporterTypes.js';
+export * from "./fullJsonStreamReporterTypes.js";
 
 class FullJsonStreamReporter extends Transform {
   private slow = 75;
@@ -22,7 +22,7 @@ class FullJsonStreamReporter extends Transform {
     callback: (err?: Error | null, data?: string) => void,
   ) {
     switch (event.type) {
-      case 'test:enqueue': {
+      case "test:enqueue": {
         this.testCount++;
         const data = event.data as { name: string; file?: string; parentName?: string };
         if (!data.parentName) {
@@ -31,10 +31,10 @@ class FullJsonStreamReporter extends Transform {
         }
         break;
       }
-      case 'test:dequeue': {
+      case "test:dequeue": {
         break;
       }
-      case 'test:start': {
+      case "test:start": {
         const data = event.data as {
           name: string;
           file?: string;
@@ -42,13 +42,10 @@ class FullJsonStreamReporter extends Transform {
           testNumber: number;
         };
         const path = data.parentName ? [data.parentName, data.name] : [data.name];
-        this.writeEvent([
-          TestEvent.TestStart,
-          { path, currentRetry: 0, file: data.file },
-        ]);
+        this.writeEvent([TestEvent.TestStart, { path, currentRetry: 0, file: data.file }]);
         break;
       }
-      case 'test:pass': {
+      case "test:pass": {
         const data = event.data as {
           name: string;
           file?: string;
@@ -59,17 +56,17 @@ class FullJsonStreamReporter extends Transform {
         const path = data.parentName ? [data.parentName, data.name] : [data.name];
         const speed =
           !data.duration || data.duration < this.slow / 2
-            ? ('fast' as const)
+            ? ("fast" as const)
             : data.duration > this.slow
-            ? ('slow' as const)
-            : ('medium' as const);
+              ? ("slow" as const)
+              : ("medium" as const);
         this.writeEvent([
           TestEvent.Pass,
           { path, duration: data.duration, speed, currentRetry: 0, file: data.file },
         ]);
         break;
       }
-      case 'test:fail': {
+      case "test:fail": {
         const data = event.data as {
           name: string;
           file?: string;
@@ -81,10 +78,10 @@ class FullJsonStreamReporter extends Transform {
         const path = data.parentName ? [data.parentName, data.name] : [data.name];
         const speed =
           !data.duration || data.duration < this.slow / 2
-            ? ('fast' as const)
+            ? ("fast" as const)
             : data.duration > this.slow
-            ? ('slow' as const)
-            : ('medium' as const);
+              ? ("slow" as const)
+              : ("medium" as const);
         this.writeEvent([
           TestEvent.Fail,
           {
@@ -101,7 +98,7 @@ class FullJsonStreamReporter extends Transform {
         ]);
         break;
       }
-      case 'test:summary': {
+      case "test:summary": {
         this.writeEvent([TestEvent.Start, { total: this.testCount }]);
         this.writeEvent([TestEvent.End, {}]);
         break;
@@ -111,7 +108,7 @@ class FullJsonStreamReporter extends Transform {
   }
 
   private writeEvent(event: TestEventTuple) {
-    this.push(JSON.stringify(event) + '\n');
+    this.push(JSON.stringify(event) + "\n");
   }
 }
 

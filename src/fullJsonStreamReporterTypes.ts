@@ -3,12 +3,12 @@
  *--------------------------------------------------------*/
 
 export enum TestEvent {
-  Start = 'start',
-  TestStart = 'testStart',
-  Pass = 'pass',
-  Fail = 'fail',
-  End = 'end',
-  SuiteStart = 'suiteStart',
+  Start = "start",
+  TestStart = "testStart",
+  Pass = "pass",
+  Fail = "fail",
+  End = "end",
+  SuiteStart = "suiteStart",
 }
 
 export interface IStartEvent {
@@ -23,7 +23,7 @@ export interface ITestStartEvent {
 
 export interface IPassEvent extends ITestStartEvent {
   duration?: number;
-  speed: 'fast' | 'medium' | 'slow';
+  speed: "fast" | "medium" | "slow";
 }
 
 export interface IFailEvent extends IPassEvent {

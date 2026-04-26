@@ -2,7 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { ProgressReporter } from '@vscode/test-electron';
+import { ProgressReporter } from "@vscode/test-electron";
 
 export interface IBaseTestConfiguration {
   /**
@@ -20,7 +20,7 @@ export interface IBaseTestConfiguration {
    *
    * Defaults to `stable`, which is latest stable version.
    */
-  version?: 'insiders' | 'stable' | string;
+  version?: "insiders" | "stable" | string;
 
   /**
    * Defines extension directories to load during tests. Defaults to the directory
@@ -33,10 +33,10 @@ export interface IBaseTestConfiguration {
    */
   workspaceFolder?: string;
 
-/**
-    * Additional options to pass to the Node.js test runner.
-    * @see https://nodejs.org/api/test.html
-    */
+  /**
+   * Additional options to pass to the Node.js test runner.
+   * @see https://nodejs.org/api/test.html
+   */
   nodeTest?: {
     /**
      * Specify file(s) to be loaded prior to root suite.
@@ -67,7 +67,7 @@ export interface IDesktopTestConfiguration extends IBaseTestConfiguration {
   /**
    * Platform to use for running the tests.
    */
-  platform?: 'desktop';
+  platform?: "desktop";
 
   /**
    * The VS Code desktop platform to download. If not specified, it defaults
@@ -162,7 +162,7 @@ export interface IDesktopTestConfiguration extends IBaseTestConfiguration {
  * @todo: this is incomplete, and does not yet function
  */
 export interface IWebTestConfiguration extends IBaseTestConfiguration {
-  platform: 'firefox' | 'webkit' | 'chromium';
+  platform: "firefox" | "webkit" | "chromium";
 }
 
 export type TestConfiguration = IDesktopTestConfiguration | IWebTestConfiguration;

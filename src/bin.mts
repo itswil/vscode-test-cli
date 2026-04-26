@@ -4,17 +4,17 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import * as chokidar from 'chokidar';
-import { resolve } from 'path';
-import { cliArgs, configFileDefault } from './cli/args.mjs';
+import * as chokidar from "chokidar";
+import { resolve } from "path";
+import { cliArgs, configFileDefault } from "./cli/args.mjs";
 import {
   ResolvedTestConfiguration,
   loadDefaultConfigFile,
   tryLoadConfigFile,
-} from './cli/config.mjs';
-import { Coverage } from './cli/coverage.mjs';
-import { IPreparedRun, IRunContext, platforms } from './cli/platform/index.mjs';
-import { TestConfiguration } from './config.js';
+} from "./cli/config.mjs";
+import { Coverage } from "./cli/coverage.mjs";
+import { IPreparedRun, IRunContext, platforms } from "./cli/platform/index.mjs";
+import { TestConfiguration } from "./config.js";
 
 export const args = cliArgs.parseSync();
 
@@ -35,7 +35,7 @@ async function main() {
       args.label?.length
         ? args.label.map((label) => {
             const found = config.tests.find((c, i) =>
-              typeof label === 'string' ? c.label === label : i === label,
+              typeof label === "string" ? c.label === label : i === label,
             );
             if (!found) {
               throw new CliExpectedError(`Could not find a configuration with label "${label}"`);
@@ -116,16 +116,16 @@ async function watchConfigs(
     args.watchFiles?.length ? args.watchFiles.map(String) : process.cwd(),
     {
       ignored: [
-        '**/.vscode-test/**',
-        '**/node_modules/**',
+        "**/.vscode-test/**",
+        "**/node_modules/**",
         ...(args.watchIgnore || []).map(String),
       ],
       ignoreInitial: true,
     },
   );
 
-  watcher.on('all', (evts) => {
-    if (evts !== 'change') {
+  watcher.on("all", (evts) => {
+    if (evts !== "change") {
       prepared = undefined; // invalidate since files will need to be re-scanned
     }
 
@@ -136,7 +136,7 @@ async function watchConfigs(
     }
   });
 
-  watcher.on('ready', () => {
+  watcher.on("ready", () => {
     runOrDebounce();
   });
 

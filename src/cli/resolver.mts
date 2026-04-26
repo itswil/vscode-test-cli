@@ -1,6 +1,6 @@
-import resolveCb from 'enhanced-resolve';
-import { promisify } from 'util';
-import { CliExpectedError } from './error.mjs';
+import resolveCb from "enhanced-resolve";
+import { promisify } from "util";
+import { CliExpectedError } from "./error.mjs";
 
 export const commonJsResolve = promisify(resolveCb);
 
@@ -14,8 +14,8 @@ export const mustResolve = async (context: string, moduleName: string) => {
   const path = await commonJsResolve(context, moduleName);
   if (!path) {
     let msg = `Could not resolve module "${moduleName}" in ${path}`;
-    if (!moduleName.startsWith('.')) {
-      msg += ' (you may need to install with `npm install`)';
+    if (!moduleName.startsWith(".")) {
+      msg += " (you may need to install with `npm install`)";
     }
 
     throw new CliExpectedError(msg);

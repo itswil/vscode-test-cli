@@ -2,23 +2,17 @@
   "name": "@vscode/test-cli",
   "version": "0.0.13",
   "description": "Command-line runner for VS Code extension tests",
-  "scripts": {
-    "prepack": "pnpm run build",
-    "build": "pnpm run clean && tsc",
-    "clean": "node -e \"fs.rmSync('out',{force:true,recursive:true})\"",
-    "test": "pnpm run clean && tsc --noEmit",
-    "fmt": "prettier --write \"src/**/*.{mts,cts}\" \"*.md\"",
-    "watch": "tsc --watch",
-    "prettier": "prettier --write src"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "type": "module",
-  "main": "out/index.cjs",
+  "keywords": [
+    "cli",
+    "test",
+    "vscode"
+  ],
+  "author": "itswil",
   "bin": {
     "vscode-test": "./out/bin.mjs"
   },
+  "type": "module",
+  "main": "out/index.cjs",
   "exports": {
     ".": {
       "import": "./out/index.mjs",
@@ -28,25 +22,15 @@
       "require": "./out/fullJsonStreamReporter.cjs"
     }
   },
-  "keywords": [
-    "vscode",
-    "test",
-    "cli"
-  ],
-  "author": "itswil",
-  "devDependencies": {
-    "@types/node": "^25.6.0",
-    "@types/yargs": "^17.0.35",
-    "@vscode/test-electron": "^2.5.2",
-    "@vscode/test-web": "^0.0.80",
-    "prettier": "^3.8.3",
-    "typescript": "^5.7.0"
+  "scripts": {
+    "prepack": "pnpm run build",
+    "build": "pnpm run clean && tsc",
+    "clean": "node -e \"fs.rmSync('out',{force:true,recursive:true})\"",
+    "test": "pnpm run clean && tsc --noEmit",
+    "fmt": "oxfmt",
+    "watch": "tsc --watch"
   },
-  "prettier": {
-    "printWidth": 100,
-    "singleQuote": true
-  },
-"dependencies": {
+  "dependencies": {
     "c8": "^11.0.0",
     "chokidar": "^5.0.0",
     "enhanced-resolve": "^5.21.0",
@@ -54,5 +38,16 @@
     "minimatch": "^10.2.5",
     "supports-color": "^10.2.2",
     "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/yargs": "^17.0.35",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/test-web": "^0.0.80",
+    "oxfmt": "^0.46.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

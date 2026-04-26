@@ -2,24 +2,24 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { existsSync, promises as fs } from 'fs';
-import { dirname, isAbsolute, join } from 'path';
-import { pathToFileURL } from 'url';
+import { existsSync, promises as fs } from "fs";
+import { dirname, isAbsolute, join } from "path";
+import { pathToFileURL } from "url";
 import {
   IConfigurationWithGlobalOptions,
   ICoverageConfiguration,
   TestConfiguration,
-} from '../config.js';
-import { CliExpectedError } from './error.mjs';
-import { mustResolve } from './resolver.mjs';
-import { ensureArray } from './util.mjs';
+} from "../config.js";
+import { CliExpectedError } from "./error.mjs";
+import { mustResolve } from "./resolver.mjs";
+import { ensureArray } from "./util.mjs";
 
 type ConfigOrArray = IConfigurationWithGlobalOptions | TestConfiguration | TestConfiguration[];
 
 const configFileRules: {
   [ext: string]: (path: string) => Promise<ConfigOrArray | Promise<ConfigOrArray>>;
 } = {
-  json: (path: string) => fs.readFile(path, 'utf8').then(JSON.parse),
+  json: (path: string) => fs.readFile(path, "utf8").then(JSON.parse),
   js: (path) => import(pathToFileURL(path).toString()),
   cjs: (path) => import(pathToFileURL(path).toString()),
   mjs: (path) => import(pathToFileURL(path).toString()),
@@ -27,7 +27,7 @@ const configFileRules: {
 
 /** Loads the default config based on the process working directory. */
 export async function loadDefaultConfigFile(): Promise<ResolvedTestConfiguration> {
-  const base = '.vscode-test';
+  const base = ".vscode-test";
 
   let dir = process.cwd();
   while (true) {
@@ -53,25 +53,25 @@ export async function loadDefaultConfigFile(): Promise<ResolvedTestConfiguration
 
 /** Loads a specific config file by the path, throwing if loading fails. */
 export async function tryLoadConfigFile(path: string): Promise<ResolvedTestConfiguration> {
-  const ext = path.split('.').pop()!;
+  const ext = path.split(".").pop()!;
   if (!configFileRules.hasOwnProperty(ext)) {
     throw new CliExpectedError(
       `I don't know how to load the extension '${ext}'. We can load: ${Object.keys(
         configFileRules,
-      ).join(', ')}`,
+      ).join(", ")}`,
     );
   }
 
   try {
     let loaded = await configFileRules[ext](path);
-    if ('default' in loaded) {
+    if ("default" in loaded) {
       // handle default es module exports
       loaded = (loaded as { default: TestConfiguration }).default;
     }
     // allow returned promises to resolve:
     loaded = await loaded;
 
-    if (typeof loaded === 'object' && 'tests' in loaded) {
+    if (typeof loaded === "object" && "tests" in loaded) {
       return await ResolvedTestConfiguration.load(loaded, path);
     }
 

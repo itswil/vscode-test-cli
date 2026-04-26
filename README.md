@@ -3,6 +3,7 @@
 ## In this fork
 
 Replaces mocha with Node.js's built-in `node:test` runner.
+
 - No longer uses `.cts` files - all source is now `.ts`
 
 ## In your VSCode Extension
@@ -16,14 +17,14 @@ Replaces mocha with Node.js's built-in `node:test` runner.
 
 ```typescript
 // out/test/myTest.test.ts
-import { describe, test, beforeEach } from 'node:test';
+import { describe, test, beforeEach } from "node:test";
 
-describe('my extension', () => {
+describe("my extension", () => {
   beforeEach(() => {
     // setup code
   });
 
-  test('does something', () => {
+  test("does something", () => {
     // test code
   });
 });
@@ -33,7 +34,6 @@ describe('my extension', () => {
 
 - `@types/node` (required for TypeScript)
 - Add `"types": ["node"]` to your `tsconfig.json` compilerOptions
-
 
 ---
 
@@ -51,23 +51,23 @@ After installing the package, the runner is available as the `vscode-test` CLI. 
 
 ```js
 // .vscode-test.mjs
-import { defineConfig } from '@vscode/test-cli';
+import { defineConfig } from "@vscode/test-cli";
 
-export default defineConfig({ files: 'out/test/**/*.test.js' });
+export default defineConfig({ files: "out/test/**/*.test.js" });
 ```
 
 Or include more options. For example:
 
 ```js
 // .vscode-test.mjs
-import { defineConfig } from '@vscode/test-cli';
+import { defineConfig } from "@vscode/test-cli";
 
 export default defineConfig([
   {
     // Required: Glob of files to load (can be an array and include absolute paths).
-    files: 'out/test/**/*.test.js',
+    files: "out/test/**/*.test.js",
     // Optional: Version to use, same as the API above, defaults to stable
-    version: 'insiders',
+    version: "insiders",
     // Optional: Root path of your extension, same as the API above, defaults
     // to the directory this config file is in
     extensionDevelopmentPath: __dirname,
@@ -75,7 +75,7 @@ export default defineConfig([
     workspaceFolder: `${__dirname}/sampleWorkspace`,
     // Optional: install additional extensions to the installation prior to testing. By
     //default, any `extensionDependencies` from the package.json are automatically installed.
-    installExtensions: ['ms-vscode.js-debug-nightly'],
+    installExtensions: ["ms-vscode.js-debug-nightly"],
   },
   // you can specify additional test configurations if necessary
 ]);

@@ -2,8 +2,8 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import type { TestsStream } from 'node:test';
-import test from 'node:test';
+import type { TestsStream } from "node:test";
+import test from "node:test";
 
 export async function run() {
   const {
@@ -39,21 +39,19 @@ export async function run() {
 
   let totalFailed = 0;
 
-  stream.on('test:fail', () => {
+  stream.on("test:fail", () => {
     totalFailed++;
   });
 
   await new Promise<void>((resolve) => {
-    stream.on('test:summary', (data) => {
+    stream.on("test:summary", (data) => {
       if (data) {
         const summaryData = data as {
           counts: { failed?: number; passed: number; skipped: number; tests: number };
         };
         totalFailed =
           summaryData.counts.failed ??
-          summaryData.counts.tests -
-            summaryData.counts.passed -
-            summaryData.counts.skipped;
+          summaryData.counts.tests - summaryData.counts.passed - summaryData.counts.skipped;
       }
       resolve();
     });
@@ -65,12 +63,12 @@ export async function run() {
 }
 
 const normalizeCasing = (path: string) => {
-  if (process.platform === 'win32' && path.match(/^[A-Z]:/)) {
+  if (process.platform === "win32" && path.match(/^[A-Z]:/)) {
     return path[0].toLowerCase() + path.slice(1);
   }
 
   return path;
 };
 
-const ensureArray = <T,>(value: T | T[] | undefined): T[] =>
+const ensureArray = <T>(value: T | T[] | undefined): T[] =>
   value ? (Array.isArray(value) ? value : [value]) : [];

@@ -2,19 +2,19 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import type * as Electron from '@vscode/test-electron';
-import { spawn } from 'child_process';
-import { join, resolve as resolvePath } from 'path';
-import supportsColor from 'supports-color';
-import { fileURLToPath, pathToFileURL } from 'url';
-import { IDesktopTestConfiguration } from '../../config.js';
-import { CliArgs } from '../args.mjs';
-import { ResolvedTestConfiguration } from '../config.mjs';
-import { CliExpectedError } from '../error.mjs';
-import { gatherFiles } from '../gatherFiles.mjs';
-import { mustResolve } from '../resolver.mjs';
-import { ensureArray, readJSON } from '../util.mjs';
-import { IPlatform, IPrepareContext, IPreparedRun, IRunContext } from './index.mjs';
+import type * as Electron from "@vscode/test-electron";
+import { spawn } from "child_process";
+import { join, resolve as resolvePath } from "path";
+import supportsColor from "supports-color";
+import { fileURLToPath, pathToFileURL } from "url";
+import { IDesktopTestConfiguration } from "../../config.js";
+import { CliArgs } from "../args.mjs";
+import { ResolvedTestConfiguration } from "../config.mjs";
+import { CliExpectedError } from "../error.mjs";
+import { gatherFiles } from "../gatherFiles.mjs";
+import { mustResolve } from "../resolver.mjs";
+import { ensureArray, readJSON } from "../util.mjs";
+import { IPlatform, IPrepareContext, IPreparedRun, IRunContext } from "./index.mjs";
 
 export class DesktopPlatform implements IPlatform {
   /** @inheritdoc */
@@ -23,7 +23,7 @@ export class DesktopPlatform implements IPlatform {
     config,
     test: _test,
   }: IPrepareContext): Promise<IPreparedRun | undefined> {
-    if (_test.platform && _test.platform !== 'desktop') {
+    if (_test.platform && _test.platform !== "desktop") {
       return undefined;
     }
 
@@ -59,7 +59,7 @@ class PreparedDesktopRun implements IPreparedRun {
     return this.config.extensionDevelopmentPath(this.test);
   }
   private get extensionTestsPath() {
-    return resolvePath(fileURLToPath(new URL('.', import.meta.url)), '../../runner.js');
+    return resolvePath(fileURLToPath(new URL(".", import.meta.url)), "../../runner.js");
   }
   private get env(): Record<string, string | undefined> {
     return {
@@ -77,7 +77,7 @@ class PreparedDesktopRun implements IPreparedRun {
   ) {}
 
   private async importTestElectron() {
-    const electronPath = await mustResolve(this.config.dir, '@vscode/test-electron');
+    const electronPath = await mustResolve(this.config.dir, "@vscode/test-electron");
     const electron: typeof Electron = await import(pathToFileURL(electronPath).toString());
     return electron;
   }
@@ -104,7 +104,7 @@ class PreparedDesktopRun implements IPreparedRun {
       // promise if the test fails. Old versions throw a string, new versions
       // throw a well-typed error.
       if (
-        typeof e === 'string' ||
+        typeof e === "string" ||
         (electron.TestRunFailedError && e instanceof electron.TestRunFailedError)
       ) {
         return 1;
@@ -134,11 +134,11 @@ class PreparedDesktopRun implements IPreparedRun {
       reporter: this.test.download?.reporter,
       timeout: this.test.download?.timeout,
       reuseMachineInstall:
-        this.test.useInstallation && 'fromMachine' in this.test.useInstallation
+        this.test.useInstallation && "fromMachine" in this.test.useInstallation
           ? this.test.useInstallation.fromMachine
           : undefined,
       vscodeExecutablePath:
-        this.test.useInstallation && 'fromPath' in this.test.useInstallation
+        this.test.useInstallation && "fromPath" in this.test.useInstallation
           ? this.test.useInstallation.fromPath
           : undefined,
     };
@@ -165,21 +165,21 @@ class PreparedDesktopRun implements IPreparedRun {
 
     const [cli, ...cliArgs] = electron.resolveCliArgsFromVSCodeExecutablePath(vscodePath, opts);
     for (const extension of exts.value) {
-      cliArgs.push('--install-extension', extension);
+      cliArgs.push("--install-extension", extension);
     }
 
     // todo@connor4312: have a nicer reporter here
     return new Promise<void>((resolve, reject) => {
-      const shell = process.platform === 'win32';
-      const installer = spawn(shell ? `"${cli}"` : cli, cliArgs, { stdio: 'pipe', shell });
-      let output: string = '';
-      installer.stdout.setEncoding('utf-8').on('data', (data) => {
+      const shell = process.platform === "win32";
+      const installer = spawn(shell ? `"${cli}"` : cli, cliArgs, { stdio: "pipe", shell });
+      let output: string = "";
+      installer.stdout.setEncoding("utf-8").on("data", (data) => {
         output += data;
       });
-      installer.stderr.setEncoding('utf-8').on('data', (data) => {
+      installer.stderr.setEncoding("utf-8").on("data", (data) => {
         output += data;
       });
-      installer.on('close', (e) => {
+      installer.on("close", (e) => {
         if (e !== 0) {
           reject(new CliExpectedError(`Failed to install extensions (${exts}): ${output}`));
         } else {
@@ -204,13 +204,13 @@ class ExtensionMerger {
   public push(exts: string[] | undefined = []) {
     for (const extension of exts) {
       // TODO: Edge case: we have same extension dependency in multiple development paths, choose lowest version?
-      const [name, version] = extension.split('@');
+      const [name, version] = extension.split("@");
       this._value.set(name, version);
     }
   }
 
   public toString() {
-    return this.value.join(', ');
+    return this.value.join(", ");
   }
 }
 
@@ -219,7 +219,7 @@ async function addDependentExtensions(
   extensionDevelopmentPaths: string[],
 ) {
   for (const extensionDevelopmentPath of extensionDevelopmentPaths) {
-    const packageJsonPath = join(extensionDevelopmentPath, 'package.json');
+    const packageJsonPath = join(extensionDevelopmentPath, "package.json");
     const packageJson = await readJSON<{ extensionDependencies?: string[] }>(packageJsonPath);
     if (!packageJson?.extensionDependencies?.length) {
       continue;

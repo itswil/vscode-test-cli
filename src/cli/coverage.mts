@@ -2,16 +2,16 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { Report } from 'c8';
-import { randomUUID } from 'crypto';
-import { existsSync, promises as fs, mkdirSync } from 'fs';
-import { tmpdir } from 'os';
-import { join, resolve } from 'path';
-import { CliArgs } from './args.mjs';
-import { ResolvedTestConfiguration } from './config.mjs';
-import { CliExpectedError } from './error.mjs';
+import { Report } from "c8";
+import { randomUUID } from "crypto";
+import { existsSync, promises as fs, mkdirSync } from "fs";
+import { tmpdir } from "os";
+import { join, resolve } from "path";
+import { CliArgs } from "./args.mjs";
+import { ResolvedTestConfiguration } from "./config.mjs";
+import { CliExpectedError } from "./error.mjs";
 
-const srcDirCandidates = ['src', 'lib', '.'];
+const srcDirCandidates = ["src", "lib", "."];
 
 /**
  * Manages collecting coverage data from test runs. All runs, regardless of
@@ -32,7 +32,7 @@ export class Coverage {
   public async write() {
     const cfg = this.config.coverage || {};
 
-    let defaultReporters = ['text-summary', 'html'];
+    let defaultReporters = ["text-summary", "html"];
     let reporterOptions: Record<string, Record<string, unknown>> | undefined;
     if (Array.isArray(cfg.reporter)) {
       defaultReporters = cfg.reporter;
@@ -50,7 +50,7 @@ export class Coverage {
           ? this.args.coverageReporter.map(String)
           : defaultReporters,
         reporterOptions,
-        reportsDirectory: this.args.coverageOutput || join(this.config.dir, 'coverage'),
+        reportsDirectory: this.args.coverageOutput || join(this.config.dir, "coverage"),
         src: this.getSourcesDirectories(),
         all: cfg.includeAll,
         excludeNodeModules: true,
@@ -71,7 +71,7 @@ export class Coverage {
 
       // While we're hacking, may as well keep hacking: we don't want to mess
       // with default excludes, but we want to exclude the .vscode-test internals
-      (report as any).exclude.exclude.push('**/.vscode-test/**');
+      (report as any).exclude.exclude.push("**/.vscode-test/**");
 
       await report.run();
     } catch (e) {

@@ -2,4 +2,4 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-export * from './index.js';
+export * from "./index.js";

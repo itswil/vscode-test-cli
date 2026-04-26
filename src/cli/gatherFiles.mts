@@ -1,8 +1,8 @@
-import { glob } from 'glob';
-import { minimatch } from 'minimatch';
-import { dirname, isAbsolute, join } from 'path';
-import { args } from '../bin.mjs';
-import { TestConfiguration } from '../config.js';
+import { glob } from "glob";
+import { minimatch } from "minimatch";
+import { dirname, isAbsolute, join } from "path";
+import { args } from "../bin.mjs";
+import { TestConfiguration } from "../config.js";
 
 /** Gathers test files that match the config */
 export async function gatherFiles(path: string, config: TestConfiguration) {
