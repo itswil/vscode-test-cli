@@ -12,7 +12,7 @@
     "prettier": "prettier --write src"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "type": "module",
   "main": "out/index.cjs",
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/Microsoft/vscode-test-cli#readme",
   "devDependencies": {
-    "@types/node": "^18.18.4",
+    "@types/node": "^20.19.39",
     "@types/yargs": "^17.0.33",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": ">=0.0.74",
@@ -55,14 +55,12 @@
     "printWidth": 100,
     "singleQuote": true
   },
-  "dependencies": {
-    "@types/mocha": "^10.0.10",
+"dependencies": {
     "c8": "^10.1.3",
     "chokidar": "^3.6.0",
     "enhanced-resolve": "^5.18.3",
     "glob": "^11.1.0",
     "minimatch": "^10.2.1",
-    "mocha": "^11.7.4",
     "supports-color": "^10.2.2",
     "yargs": "^17.7.2"
   }

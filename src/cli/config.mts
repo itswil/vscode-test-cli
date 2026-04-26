@@ -88,13 +88,13 @@ export class ResolvedTestConfiguration implements IConfigurationWithGlobalOption
   public readonly dir: string;
 
   public static async load(config: IConfigurationWithGlobalOptions, path: string) {
-    // Resolve all mocha `require` locations relative to the configuration file,
+    // Resolve all node:test `require` locations relative to the configuration file,
     // since these are otherwise relative to the runner which is opaque to the user.
     const dir = dirname(path);
     for (const test of config.tests) {
-      if (test.mocha?.require) {
-        test.mocha.require = await Promise.all(
-          ensureArray(test.mocha.require).map((f) => mustResolve(dir, f)),
+      if (test.nodeTest?.require) {
+        test.nodeTest.require = await Promise.all(
+          ensureArray(test.nodeTest.require).map((f) => mustResolve(dir, f)),
         );
       }
     }

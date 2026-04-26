@@ -2,7 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-export enum MochaEvent {
+export enum TestEvent {
   Start = 'start',
   TestStart = 'testStart',
   Pass = 'pass',
@@ -40,10 +40,10 @@ export interface ISuiteStartEvent {
   file?: string;
 }
 
-export type MochaEventTuple =
-  | [MochaEvent.Start, IStartEvent]
-  | [MochaEvent.TestStart, ITestStartEvent]
-  | [MochaEvent.Pass, IPassEvent]
-  | [MochaEvent.Fail, IFailEvent]
-  | [MochaEvent.End, IEndEvent]
-  | [MochaEvent.SuiteStart, ISuiteStartEvent];
+export type TestEventTuple =
+  | [TestEvent.Start, IStartEvent]
+  | [TestEvent.TestStart, ITestStartEvent]
+  | [TestEvent.Pass, IPassEvent]
+  | [TestEvent.Fail, IFailEvent]
+  | [TestEvent.End, IEndEvent]
+  | [TestEvent.SuiteStart, ISuiteStartEvent];

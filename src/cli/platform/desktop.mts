@@ -38,14 +38,14 @@ export class DesktopPlatform implements IPlatform {
     }
 
     const preload = await Promise.all(
-      [...ensureArray(test.mocha?.preload || []), ...ensureArray(args.file || [])].map((p) =>
+      [...ensureArray(test.nodeTest?.require || []), ...ensureArray(args.file || [])].map((p) =>
         mustResolve(config.dir, String(p)),
       ),
     );
 
     const testEnvOptions = JSON.stringify({
-      mochaOpts: { ...args, ...test.mocha },
-      colorDefault: supportsColor.stdout || process.env.MOCHA_COLORS !== undefined,
+      nodeTestOpts: { ...args, ...test.nodeTest },
+      colorDefault: supportsColor.stdout || process.env.NODE_TEST_COLORS !== undefined,
       preload,
       files: await gatherFiles(config.path, test),
     });

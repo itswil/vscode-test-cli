@@ -1,10 +1,10 @@
 import { cpus } from 'os';
 import yargs from 'yargs';
 
-const rulesAndBehavior = 'Mocha: Rules & Behavior';
-const reportingAndOutput = 'Mocha: Reporting & Output';
-const fileHandling = 'Mocha: File Handling';
-const testFilters = 'Mocha: Test Filters';
+const rulesAndBehavior = 'Test Runner: Rules & Behavior';
+const reportingAndOutput = 'Test Runner: Reporting & Output';
+const fileHandling = 'Test Runner: File Handling';
+const testFilters = 'Test Runner: Test Filters';
 const testCoverage = 'Test Coverage';
 const vscodeSection = 'VS Code Options';
 export const configFileDefault = 'nearest .vscode-test.js';

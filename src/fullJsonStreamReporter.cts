@@ -2,66 +2,117 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import * as Mocha from 'mocha';
-import { inspect } from 'util';
-import { MochaEvent, MochaEventTuple } from './fullJsonStreamReporterTypes.cjs';
+import { Transform } from 'node:stream';
+import { inspect } from 'node:util';
+import { TestEvent, TestEventTuple } from './fullJsonStreamReporterTypes.cjs';
 
 export * from './fullJsonStreamReporterTypes.cjs';
 
-/**
- * Similar to the mocha JSON stream, but includes additional information
- * on failure and when tests run. Specifically, the mocha json-stream does not
- * include unmangled expected versus actual results.
- *
- * Writes a superset of the data that json-stream normally would.
- */
-module.exports = class FullJsonStreamReporter {
-  constructor(runner: Mocha.Runner) {
-    const total = runner.total;
-    runner.once(Mocha.Runner.constants.EVENT_RUN_BEGIN, () =>
-      writeEvent([MochaEvent.Start, { total }]),
-    );
-    runner.once(Mocha.Runner.constants.EVENT_RUN_END, () => writeEvent([MochaEvent.End, {}]));
+class FullJsonStreamReporter extends Transform {
+  private slow = 75;
+  private testCount = 0;
 
-    runner.on(Mocha.Runner.constants.EVENT_SUITE_BEGIN, (suite: Mocha.Suite) =>
-      writeEvent([MochaEvent.SuiteStart, { path: suite.titlePath(), file: suite.file }]),
-    );
-    runner.on(Mocha.Runner.constants.EVENT_TEST_BEGIN, (test: Mocha.Test) =>
-      writeEvent([MochaEvent.TestStart, clean(test)]),
-    );
-    runner.on(Mocha.Runner.constants.EVENT_TEST_PASS, (test) =>
-      writeEvent([MochaEvent.Pass, clean(test)]),
-    );
-    runner.on(Mocha.Runner.constants.EVENT_TEST_FAIL, (test, err) => {
-      writeEvent([
-        MochaEvent.Fail,
-        {
-          ...clean(test),
-          actual: inspect(err.actual, { depth: 30 }),
-          expected: inspect(err.expected, { depth: 30 }),
-          err: err.message,
-          stack: err.stack || null,
-        },
-      ]);
-    });
+  constructor() {
+    super({ writableObjectMode: true });
   }
-};
 
-function writeEvent(event: MochaEventTuple) {
-  process.stdout.write(JSON.stringify(event) + '\n');
+  override _transform(
+    event: { type: string; data: unknown },
+    _encoding: string,
+    callback: (err?: Error | null, data?: string) => void,
+  ) {
+    switch (event.type) {
+      case 'test:enqueue': {
+        this.testCount++;
+        const data = event.data as { name: string; file?: string; parentName?: string };
+        if (!data.parentName) {
+          const path = [data.name];
+          this.writeEvent([TestEvent.SuiteStart, { path, file: data.file }]);
+        }
+        break;
+      }
+      case 'test:dequeue': {
+        break;
+      }
+      case 'test:start': {
+        const data = event.data as {
+          name: string;
+          file?: string;
+          parentName?: string;
+          testNumber: number;
+        };
+        const path = data.parentName ? [data.parentName, data.name] : [data.name];
+        this.writeEvent([
+          TestEvent.TestStart,
+          { path, currentRetry: 0, file: data.file },
+        ]);
+        break;
+      }
+      case 'test:pass': {
+        const data = event.data as {
+          name: string;
+          file?: string;
+          parentName?: string;
+          duration: number;
+          testNumber: number;
+        };
+        const path = data.parentName ? [data.parentName, data.name] : [data.name];
+        const speed =
+          !data.duration || data.duration < this.slow / 2
+            ? ('fast' as const)
+            : data.duration > this.slow
+            ? ('slow' as const)
+            : ('medium' as const);
+        this.writeEvent([
+          TestEvent.Pass,
+          { path, duration: data.duration, speed, currentRetry: 0, file: data.file },
+        ]);
+        break;
+      }
+      case 'test:fail': {
+        const data = event.data as {
+          name: string;
+          file?: string;
+          parentName?: string;
+          duration: number;
+          error: { message: string; stack?: string; actual?: unknown; expected?: unknown };
+          testNumber: number;
+        };
+        const path = data.parentName ? [data.parentName, data.name] : [data.name];
+        const speed =
+          !data.duration || data.duration < this.slow / 2
+            ? ('fast' as const)
+            : data.duration > this.slow
+            ? ('slow' as const)
+            : ('medium' as const);
+        this.writeEvent([
+          TestEvent.Fail,
+          {
+            path,
+            duration: data.duration,
+            speed,
+            currentRetry: 0,
+            file: data.file,
+            actual: inspect(data.error.actual, { depth: 30 }),
+            expected: inspect(data.error.expected, { depth: 30 }),
+            err: data.error.message,
+            stack: data.error.stack || null,
+          },
+        ]);
+        break;
+      }
+      case 'test:summary': {
+        this.writeEvent([TestEvent.Start, { total: this.testCount }]);
+        this.writeEvent([TestEvent.End, {}]);
+        break;
+      }
+    }
+    callback(null);
+  }
+
+  private writeEvent(event: TestEventTuple) {
+    this.push(JSON.stringify(event) + '\n');
+  }
 }
 
-const clean = (test: Mocha.Test) => {
-  return {
-    path: test.titlePath(),
-    duration: test.duration,
-    currentRetry: (test as any).currentRetry(),
-    file: test.file,
-    speed:
-      !test.duration || test.duration < test.slow() / 2
-        ? ('fast' as const)
-        : test.duration > test.slow()
-        ? ('slow' as const)
-        : ('medium' as const),
-  };
-};
+module.exports = FullJsonStreamReporter;

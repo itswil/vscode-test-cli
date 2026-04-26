@@ -33,21 +33,19 @@ export interface IBaseTestConfiguration {
    */
   workspaceFolder?: string;
 
-  /**
-   * Additional options to pass to the Mocha runner. Any options given on the
-   * command line will be merged into and override these defaults.
-   * @see https://mochajs.org/api/mocha
-   */
-  mocha?: Mocha.MochaOptions & {
+/**
+    * Additional options to pass to the Node.js test runner.
+    * @see https://nodejs.org/api/test.html
+    */
+  nodeTest?: {
     /**
      * Specify file(s) to be loaded prior to root suite.
-     * @deprecated use `require` instead
      */
-    preload?: string | string[];
+    require?: string | string[];
 
     /**
      * Path to a reporter to use.
-     * @see https://mochajs.org/api/tutorial-custom-reporter
+     * @see https://nodejs.org/api/test.html#test-reporters
      */
     reporter?: string | undefined;
   };
