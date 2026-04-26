@@ -2,9 +2,10 @@
 
 ## In this fork
 
-Replaces mocha with Node.js's built-in `node:test` runner.
-
-- No longer uses `.cts` files - all source is now `.ts`
+- `node:test` replaces `mocha`
+- `.ts` files replaces `.cts`
+- `oxfmt` replaces `prettier`
+- All deps updated
 
 ## In your VSCode Extension
 
